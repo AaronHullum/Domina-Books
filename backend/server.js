@@ -9,6 +9,8 @@ import "./database/init.js";
 import authRoutes from "./routes/authRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
+import journalRoutes from "./routes/journalRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 
 const app = express();
 
@@ -23,8 +25,12 @@ app.get("/api/health",(req,res)=>{
 });
 
 app.use("/api/auth", authRoutes);
+
 app.use("/api/companies", companyRoutes);
 app.use("/api/companies", accountRoutes);
+app.use("/api/companies", journalRoutes);
+
+app.use("/api/reports", reportRoutes);
 
 const PORT = process.env.PORT || 4000;
 
