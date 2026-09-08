@@ -11,6 +11,8 @@ import companyRoutes from "./routes/companyRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
 import journalRoutes from "./routes/journalRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
+import ledgerRoutes from "./routes/ledgerRoutes.js";
+import financialStatementRoutes from "./routes/financialStatementRoutes.js";
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use("/api/companies", accountRoutes);
 app.use("/api/companies", journalRoutes);
 
 app.use("/api/reports", reportRoutes);
+app.use("/api/reports", ledgerRoutes);
+app.use("/api/reports", financialStatementRoutes);
 
 const PORT = process.env.PORT || 4000;
 
