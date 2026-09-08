@@ -9,11 +9,14 @@ import "./database/init.js";
 import authRoutes from "./routes/authRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
+import customerRoutes from "./routes/customerRoutes.js";
+import invoiceRoutes from "./routes/invoiceRoutes.js";
+
 import journalRoutes from "./routes/journalRoutes.js";
+
 import reportRoutes from "./routes/reportRoutes.js";
 import ledgerRoutes from "./routes/ledgerRoutes.js";
 import financialStatementRoutes from "./routes/financialStatementRoutes.js";
-import customerRoutes from "./routes/customerRoutes.js";
 
 const app = express();
 
@@ -31,8 +34,9 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/companies", companyRoutes);
 app.use("/api/companies", accountRoutes);
-app.use("/api/companies", journalRoutes);
 app.use("/api/companies", customerRoutes);
+app.use("/api/companies", invoiceRoutes);
+app.use("/api/companies", journalRoutes);
 
 app.use("/api/reports", reportRoutes);
 app.use("/api/reports", ledgerRoutes);
