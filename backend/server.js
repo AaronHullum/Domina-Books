@@ -11,6 +11,7 @@ import companyRoutes from "./routes/companyRoutes.js";
 import accountRoutes from "./routes/accountRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import invoiceRoutes from "./routes/invoiceRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 import journalRoutes from "./routes/journalRoutes.js";
 
@@ -36,6 +37,7 @@ app.use("/api/companies", companyRoutes);
 app.use("/api/companies", accountRoutes);
 app.use("/api/companies", customerRoutes);
 app.use("/api/companies", invoiceRoutes);
+app.use("/api/companies", paymentRoutes);
 app.use("/api/companies", journalRoutes);
 
 app.use("/api/reports", reportRoutes);
