@@ -31,6 +31,10 @@ import inventoryReportRoutes from "./routes/inventoryReportRoutes.js";
 import purchaseOrderRoutes from "./routes/purchaseOrderRoutes.js";
 import purchaseReceiptRoutes from "./routes/purchaseReceiptRoutes.js";
 import purchaseReportRoutes from "./routes/purchaseReportRoutes.js";
+import quoteRoutes from "./routes/quoteRoutes.js";
+import salesOrderRoutes from "./routes/salesOrderRoutes.js";
+import shipmentRoutes from "./routes/shipmentRoutes.js";
+import salesReportRoutes from "./routes/salesReportRoutes.js";
 const app = express();
 
 app.use(cors());
@@ -68,6 +72,11 @@ app.use("/api/inventory", inventoryReportRoutes);
 app.use("/api/purchasing", purchaseOrderRoutes);
 app.use("/api/purchasing", purchaseReceiptRoutes);
 app.use("/api/purchasing", purchaseReportRoutes);
+app.use("/api/sales", quoteRoutes);
+app.use("/api/sales", salesOrderRoutes);
+app.use("/api/sales", shipmentRoutes);
+app.use("/api/sales", salesReportRoutes);
+``
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT,()=>{

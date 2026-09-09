@@ -178,6 +178,34 @@ CREATE TABLE IF NOT EXISTS purchase_receipts (
   receipt_date TEXT NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS quotes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  customer_id INTEGER NOT NULL,
+  quote_number TEXT NOT NULL,
+  quote_date TEXT NOT NULL,
+  total_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS sales_orders (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  customer_id INTEGER NOT NULL,
+  order_number TEXT NOT NULL,
+  order_date TEXT NOT NULL,
+  status TEXT DEFAULT 'OPEN',
+  total_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS shipments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  sales_order_id INTEGER NOT NULL,
+  shipment_date TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 console.log("Database initialized");
