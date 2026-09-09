@@ -42,4 +42,26 @@ export function receivePurchaseOrder(data) {
     `)
     .run(
       data.companyId,
-      data
+      data.purchaseOrderId,
+      data.receiptDate
+    );
+
+  createJournalEntry({
+    companyId: data.companyId,
+    entryDate: data.receiptDate,
+    reference: "PO-RECEIPT",
+    description: "Purchase Receipt",
+    lines: [
+      {
+        accountId: 3,
+        debitCents: data.totalCents
+      },
+      {
+        accountId: 4,
+        creditCents: data.totalCents
+      }
+    ]
+  });
+
+  return result.lastInsertRowid;
+}
