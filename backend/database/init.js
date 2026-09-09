@@ -61,6 +61,43 @@ CREATE TABLE IF NOT EXISTS journal_lines (
   debit_cents INTEGER DEFAULT 0,
   credit_cents INTEGER DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS vendors (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  vendor_name TEXT NOT NULL,
+  email TEXT,
+  phone TEXT,
+  address TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bills (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  vendor_id INTEGER NOT NULL,
+  bill_number TEXT NOT NULL,
+  bill_date TEXT NOT NULL,
+  due_date TEXT,
+  total_cents INTEGER NOT NULL,
+  balance_cents INTEGER NOT NULL,
+  status TEXT DEFAULT 'OPEN',
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS vendor_payments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  vendor_id INTEGER NOT NULL,
+  bill_id INTEGER,
+  payment_date TEXT NOT NULL,
+  amount_cents INTEGER NOT NULL,
+  reference TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
 `);
 
 console.log("Database initialized");
+
+

@@ -18,7 +18,9 @@ import journalRoutes from "./routes/journalRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import ledgerRoutes from "./routes/ledgerRoutes.js";
 import financialStatementRoutes from "./routes/financialStatementRoutes.js";
-
+import vendorRoutes from "./routes/vendorRoutes.js";
+import billRoutes from "./routes/billRoutes.js";
+import vendorPaymentRoutes from "./routes/vendorPaymentRoutes.js";
 const app = express();
 
 app.use(cors());
@@ -39,7 +41,9 @@ app.use("/api/companies", customerRoutes);
 app.use("/api/companies", invoiceRoutes);
 app.use("/api/companies", paymentRoutes);
 app.use("/api/companies", journalRoutes);
-
+app.use("/api/companies", vendorRoutes);
+app.use("/api/companies", billRoutes);
+app.use("/api/companies", vendorPaymentRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/reports", ledgerRoutes);
 app.use("/api/reports", financialStatementRoutes);
