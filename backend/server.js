@@ -14,7 +14,9 @@ import invoiceRoutes from "./routes/invoiceRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import apReportRoutes from "./routes/apReportRoutes.js";
 import journalRoutes from "./routes/journalRoutes.js";
-
+import bankAccountRoutes from "./routes/bankAccountRoutes.js";
+import bankTransactionRoutes from "./routes/bankTransactionRoutes.js";
+import bankReconciliationRoutes from "./routes/bankReconciliationRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import ledgerRoutes from "./routes/ledgerRoutes.js";
 import financialStatementRoutes from "./routes/financialStatementRoutes.js";
@@ -34,7 +36,9 @@ app.get("/api/health",(req,res)=>{
 });
 
 app.use("/api/auth", authRoutes);
-
+app.use("/api/banking", bankAccountRoutes);
+app.use("/api/banking", bankTransactionRoutes);
+app.use("/api/banking", bankReconciliationRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/companies", accountRoutes);
 app.use("/api/companies", customerRoutes);

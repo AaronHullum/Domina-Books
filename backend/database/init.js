@@ -96,6 +96,34 @@ CREATE TABLE IF NOT EXISTS vendor_payments (
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS bank_accounts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  account_name TEXT NOT NULL,
+  bank_name TEXT,
+  account_number TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bank_transactions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  bank_account_id INTEGER NOT NULL,
+  transaction_date TEXT NOT NULL,
+  transaction_type TEXT NOT NULL,
+  amount_cents INTEGER NOT NULL,
+  description TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bank_reconciliations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  bank_account_id INTEGER NOT NULL,
+  statement_date TEXT NOT NULL,
+  statement_balance_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 console.log("Database initialized");
