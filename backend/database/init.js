@@ -160,6 +160,24 @@ CREATE TABLE IF NOT EXISTS inventory_transactions (
   unit_cost_cents INTEGER NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS purchase_orders (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  vendor_id INTEGER NOT NULL,
+  po_number TEXT NOT NULL,
+  po_date TEXT NOT NULL,
+  status TEXT DEFAULT 'OPEN',
+  total_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS purchase_receipts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  purchase_order_id INTEGER NOT NULL,
+  receipt_date TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 console.log("Database initialized");

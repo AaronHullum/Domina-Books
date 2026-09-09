@@ -28,6 +28,9 @@ import auditRoutes from "./routes/auditRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import inventoryTransactionRoutes from "./routes/inventoryTransactionRoutes.js";
 import inventoryReportRoutes from "./routes/inventoryReportRoutes.js";
+import purchaseOrderRoutes from "./routes/purchaseOrderRoutes.js";
+import purchaseReceiptRoutes from "./routes/purchaseReceiptRoutes.js";
+import purchaseReportRoutes from "./routes/purchaseReportRoutes.js";
 const app = express();
 
 app.use(cors());
@@ -62,6 +65,9 @@ app.use("/api/gl", auditRoutes);
 app.use("/api/inventory", itemRoutes);
 app.use("/api/inventory", inventoryTransactionRoutes);
 app.use("/api/inventory", inventoryReportRoutes);
+app.use("/api/purchasing", purchaseOrderRoutes);
+app.use("/api/purchasing", purchaseReceiptRoutes);
+app.use("/api/purchasing", purchaseReportRoutes);
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT,()=>{
