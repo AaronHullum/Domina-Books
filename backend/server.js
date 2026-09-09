@@ -12,7 +12,7 @@ import accountRoutes from "./routes/accountRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import invoiceRoutes from "./routes/invoiceRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-
+import apReportRoutes from "./routes/apReportRoutes.js";
 import journalRoutes from "./routes/journalRoutes.js";
 
 import reportRoutes from "./routes/reportRoutes.js";
@@ -47,7 +47,7 @@ app.use("/api/companies", vendorPaymentRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/reports", ledgerRoutes);
 app.use("/api/reports", financialStatementRoutes);
-
+app.use("/api/reports", apReportRoutes);
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT,()=>{
