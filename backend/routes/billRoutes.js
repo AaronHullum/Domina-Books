@@ -67,11 +67,11 @@ router.post(
         description: "Vendor Bill",
         lines: [
           {
-            accountId: 7,
+            accountId: 8,
             debitCents: total
           },
           {
-            accountId: 3,
+            accountId: 4,
             creditCents: total
           }
         ]

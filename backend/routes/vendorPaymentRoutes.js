@@ -65,7 +65,7 @@ router.post(
         description: "Vendor Payment",
         lines: [
           {
-            accountId: 3,
+            accountId: 4,
             debitCents: amount
           },
           {
