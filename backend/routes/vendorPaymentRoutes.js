@@ -57,7 +57,45 @@ router.post(
           amount,
           req.body.reference || null
         );
+const bill =
+  db.prepare(`
+    SELECT *
+    FROM bills
+    WHERE id = ?
+  `)
+  .get(req.body.billId);
 
+if (!bill) {
+  throw new Error("Bill not found");
+}
+
+const newBalance =
+  Math.max(
+    0,
+    bill.balance_cents - amount
+  );
+
+let status = "OPEN";
+
+if (newBalance === 0) {
+  status = "PAID";
+}
+else if (newBalance < bill.total_cents) {
+  status = "PARTIAL";
+}
+
+db.prepare(`
+  UPDATE bills
+  SET
+    balance_cents = ?,
+    status = ?
+  WHERE id = ?
+`)
+.run(
+  newBalance,
+  status,
+  req.body.billId
+);
       createJournalEntry({
         companyId,
         entryDate: req.body.paymentDate,
