@@ -23,6 +23,8 @@ import financialStatementRoutes from "./routes/financialStatementRoutes.js";
 import vendorRoutes from "./routes/vendorRoutes.js";
 import billRoutes from "./routes/billRoutes.js";
 import vendorPaymentRoutes from "./routes/vendorPaymentRoutes.js";
+import fiscalRoutes from "./routes/fiscalRoutes.js";
+import auditRoutes from "./routes/auditRoutes.js";
 const app = express();
 
 app.use(cors());
@@ -52,6 +54,8 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/reports", ledgerRoutes);
 app.use("/api/reports", financialStatementRoutes);
 app.use("/api/reports", apReportRoutes);
+app.use("/api/gl", fiscalRoutes);
+app.use("/api/gl", auditRoutes);
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT,()=>{

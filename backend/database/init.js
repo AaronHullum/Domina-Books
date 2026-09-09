@@ -124,6 +124,23 @@ CREATE TABLE IF NOT EXISTS bank_reconciliations (
   statement_balance_cents INTEGER NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS fiscal_periods (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  period_end TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'OPEN',
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS audit_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  entity_type TEXT NOT NULL,
+  entity_id INTEGER,
+  action TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 console.log("Database initialized");
