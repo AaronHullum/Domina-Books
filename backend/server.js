@@ -40,6 +40,8 @@ import depreciationRoutes from "./routes/depreciationRoutes.js";
 import assetReportRoutes from "./routes/assetReportRoutes.js";
 import payrollIntegrationRoutes from "./routes/payrollIntegrationRoutes.js";
 import payrollReportRoutes from "./routes/payrollReportRoutes.js";
+import executiveReportRoutes from "./routes/executiveReportRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 const app = express();
 
 app.use(cors());
@@ -86,6 +88,8 @@ app.use("/api/assets", depreciationRoutes);
 app.use("/api/assets", assetReportRoutes);
 app.use("/api/payroll", payrollIntegrationRoutes);
 app.use("/api/payroll", payrollReportRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/reports", executiveReportRoutes);
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT,()=>{
