@@ -141,6 +141,25 @@ CREATE TABLE IF NOT EXISTS audit_log (
   action TEXT NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  sku TEXT NOT NULL,
+  item_name TEXT NOT NULL,
+  unit_cost_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS inventory_transactions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  item_id INTEGER NOT NULL,
+  transaction_date TEXT NOT NULL,
+  transaction_type TEXT NOT NULL,
+  quantity REAL NOT NULL,
+  unit_cost_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 console.log("Database initialized");
