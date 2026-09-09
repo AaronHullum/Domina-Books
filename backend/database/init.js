@@ -226,6 +226,15 @@ CREATE TABLE IF NOT EXISTS depreciation_runs (
   amount_cents INTEGER NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS payroll_imports (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  pay_date TEXT NOT NULL,
+  reference TEXT,
+  gross_pay_cents INTEGER NOT NULL,
+  net_pay_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 console.log("Database initialized");
