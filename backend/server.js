@@ -35,6 +35,9 @@ import quoteRoutes from "./routes/quoteRoutes.js";
 import salesOrderRoutes from "./routes/salesOrderRoutes.js";
 import shipmentRoutes from "./routes/shipmentRoutes.js";
 import salesReportRoutes from "./routes/salesReportRoutes.js";
+import assetRoutes from "./routes/assetRoutes.js";
+import depreciationRoutes from "./routes/depreciationRoutes.js";
+import assetReportRoutes from "./routes/assetReportRoutes.js";
 const app = express();
 
 app.use(cors());
@@ -76,7 +79,9 @@ app.use("/api/sales", quoteRoutes);
 app.use("/api/sales", salesOrderRoutes);
 app.use("/api/sales", shipmentRoutes);
 app.use("/api/sales", salesReportRoutes);
-``
+app.use("/api/assets", assetRoutes);
+app.use("/api/assets", depreciationRoutes);
+app.use("/api/assets", assetReportRoutes);
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT,()=>{

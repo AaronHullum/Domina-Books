@@ -206,6 +206,26 @@ CREATE TABLE IF NOT EXISTS shipments (
   shipment_date TEXT NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS fixed_assets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  asset_name TEXT NOT NULL,
+  asset_category TEXT NOT NULL,
+  acquisition_date TEXT NOT NULL,
+  cost_cents INTEGER NOT NULL,
+  useful_life_years INTEGER NOT NULL,
+  salvage_value_cents INTEGER DEFAULT 0,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS depreciation_runs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_id INTEGER NOT NULL,
+  asset_id INTEGER NOT NULL,
+  depreciation_date TEXT NOT NULL,
+  amount_cents INTEGER NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 console.log("Database initialized");
