@@ -5,7 +5,7 @@ import { createSalesOrder } from "../sales/salesEngine.js";
 
 const router = express.Router();
 
-router.use(authenticate);
+// router.use(authenticate);
 
 router.get("/:companyId/sales-orders",(req,res)=>{
 

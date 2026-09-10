@@ -1,6 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import Dashboard from "../pages/Dashboard";
+import Customers from "../pages/Customers";
+import Vendors from "../pages/Vendors";
+import Reports from "../pages/Reports";
+import Inventory from "../pages/Inventory";
+import Banking from "../pages/Banking";
+import Purchasing from "../pages/Purchasing";
+import Sales from "../pages/Sales";
+import Assets from "../pages/Assets";
 
 function Placeholder({ title }) {
   return (
@@ -16,15 +24,51 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Dashboard />} />
-        <Route path="customers" element={<Placeholder title="Customers" />} />
-        <Route path="vendors" element={<Placeholder title="Vendors" />} />
-        <Route path="banking" element={<Placeholder title="Banking" />} />
-        <Route path="inventory" element={<Placeholder title="Inventory" />} />
-        <Route path="purchasing" element={<Placeholder title="Purchasing" />} />
-        <Route path="sales" element={<Placeholder title="Sales" />} />
-        <Route path="assets" element={<Placeholder title="Fixed Assets" />} />
-        <Route path="reports" element={<Placeholder title="Reports" />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+
+        <Route
+          path="customers"
+          element={<Customers />}
+        />
+
+        <Route
+          path="vendors"
+          element={<Vendors />}
+        />
+
+        <Route
+          path="banking"
+          element={<Banking />}
+        />
+
+        <Route
+          path="inventory"
+          element={<Inventory />}
+        />
+
+        <Route
+          path="purchasing"
+          element={<Purchasing />}
+        />
+
+        <Route
+          path="sales"
+          element={<Sales />}
+        />
+
+        <Route
+          path="assets"
+          element={<Assets />}
+        />
+
+        <Route
+          path="reports"
+          element={<Reports />}
+        />
+
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
+        />
       </Route>
     </Routes>
   );

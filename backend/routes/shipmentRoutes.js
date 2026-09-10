@@ -4,7 +4,7 @@ import { createShipment } from "../sales/salesEngine.js";
 
 const router = express.Router();
 
-router.use(authenticate);
+// router.use(authenticate);
 
 router.post("/:companyId/shipments",(req,res)=>{
 

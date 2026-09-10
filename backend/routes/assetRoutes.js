@@ -5,7 +5,7 @@ import { createAsset } from "../fixedAssets/assetEngine.js";
 
 const router = express.Router();
 
-router.use(authenticate);
+// router.use(authenticate);
 
 router.get("/:companyId/assets",(req,res)=>{
 

@@ -1,0 +1,17 @@
+.erp-page {
+  padding: 32px;
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.page-grid {
+  display: grid;
+  gap: 24px;
+}

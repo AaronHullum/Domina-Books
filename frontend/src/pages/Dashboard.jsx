@@ -3,82 +3,131 @@ import api from "../api/api";
 
 function Dashboard() {
   const [data, setData] = useState(null);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     async function loadDashboard() {
       try {
-        const response = await api.get("/dashboard/1/dashboard");
+        const response =
+          await api.get(
+            "/dashboard/1/dashboard"
+          );
+
         setData(response.data);
       } catch (err) {
         console.error(err);
-        setError("Unable to load dashboard data.");
       }
     }
 
     loadDashboard();
   }, []);
 
-  if (error) {
-    return (
-      <div style={{ padding: "32px" }}>
-        <h1>Dashboard</h1>
-        <p>{error}</p>
-      </div>
-    );
-  }
-
   if (!data) {
     return (
       <div style={{ padding: "32px" }}>
-        <h1>Dashboard</h1>
-        <p>Loading dashboard...</p>
+        <h1>Executive Dashboard</h1>
+        <p>Loading...</p>
       </div>
     );
   }
 
-  const cards = [
-    { label: "Customers", value: data.customers ?? 0 },
-    { label: "Vendors", value: data.vendors ?? 0 },
-    { label: "Invoices", value: data.invoices ?? 0 },
-    { label: "Bills", value: data.bills ?? 0 },
-  ];
-
   return (
     <div style={{ padding: "32px" }}>
-      <h1>Dashboard</h1>
-      <p>Welcome to DominaBooks ERP.</p>
+      <h1>Executive Dashboard</h1>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+          gridTemplateColumns:
+            "repeat(4, 1fr)",
           gap: "20px",
-          marginTop: "28px",
+          marginTop: "20px"
         }}
       >
-        {cards.map((card) => (
+        <div className="card">
+          <h3>Customers</h3>
+          <h1>{data.customers}</h1>
+        </div>
+
+        <div className="card">
+          <h3>Vendors</h3>
+          <h1>{data.vendors}</h1>
+        </div>
+
+        <div className="card">
+          <h3>Invoices</h3>
+          <h1>{data.invoices}</h1>
+        </div>
+
+        <div className="card">
+          <h3>Bills</h3>
+          <h1>{data.bills}</h1>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "2fr 1fr",
+          gap: "20px",
+          marginTop: "24px"
+        }}
+      >
+        <div className="card">
+          <h2>Business Overview</h2>
+
           <div
-            key={card.label}
             style={{
-              padding: "24px",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              background: "#fff",
+              height: "250px",
+              background: "#f3f4f6",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            <div style={{ fontSize: "14px" }}>{card.label}</div>
-            <div
-              style={{
-                fontSize: "32px",
-                fontWeight: "700",
-                marginTop: "8px",
-              }}
-            >
-              {card.value}
-            </div>
+            Financial Chart Coming Soon
           </div>
-        ))}
+        </div>
+
+        <div className="card">
+          <h2>Quick Actions</h2>
+
+          <button>
+            Add Customer
+          </button>
+
+          <br /><br />
+
+          <button>
+            Add Vendor
+          </button>
+
+          <br /><br />
+
+          <button>
+            Create Purchase Order
+          </button>
+
+          <br /><br />
+
+          <button>
+            Create Sales Order
+          </button>
+        </div>
+      </div>
+
+      <div
+        className="card"
+        style={{
+          marginTop: "24px"
+        }}
+      >
+        <h2>Recent Activity</h2>
+
+        <p>✅ Customer Added</p>
+        <p>✅ Vendor Added</p>
+        <p>✅ Asset Added</p>
+        <p>✅ Purchase Order Created</p>
       </div>
     </div>
   );

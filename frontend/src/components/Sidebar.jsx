@@ -16,27 +16,42 @@ function Sidebar() {
   return (
     <aside
       style={{
-        width: "240px",
+        width: "280px",
         padding: "24px 16px",
-        borderRight: "1px solid #ddd",
-        background: "#f8f9fa",
+        background: "#0f172a",
+        borderRight: "1px solid #1e293b",
         boxSizing: "border-box",
       }}
     >
-      <div style={{ fontSize: "22px", fontWeight: "700", marginBottom: "28px" }}>
+      <div
+        style={{
+          fontSize: "30px",
+          fontWeight: "800",
+          color: "#ffffff",
+          marginBottom: "24px",
+        }}
+      >
         DominaBooks
       </div>
 
-      <nav style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      <nav
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
         {navigation.map((item) => (
           <Link
             key={item.path}
             to={item.path}
             style={{
-              padding: "10px 12px",
+              padding: "12px 14px",
+              color: "#e2e8f0",
               textDecoration: "none",
-              color: "#222",
-              borderRadius: "6px",
+              borderRadius: "12px",
+              fontWeight: "600",
+              transition: "all .2s ease",
             }}
           >
             {item.label}

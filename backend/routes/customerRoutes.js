@@ -8,11 +8,13 @@ import {
 
 const router = express.Router();
 
-router.use(authenticate);
+// router.use(authenticate);
 
 router.get(
   "/:companyId/customers",
   (req,res)=>{
+
+    console.log("CUSTOMERS ROUTE HIT");
 
     const customers =
       db.prepare(`

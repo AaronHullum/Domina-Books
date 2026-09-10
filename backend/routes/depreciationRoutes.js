@@ -4,7 +4,7 @@ import { runDepreciation } from "../fixedAssets/assetEngine.js";
 
 const router = express.Router();
 
-router.use(authenticate);
+// router.use(authenticate);
 
 router.post("/:companyId/depreciation",(req,res)=>{
 
