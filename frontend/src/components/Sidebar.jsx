@@ -2,14 +2,30 @@ import { Link } from "react-router-dom";
 
 const navigation = [
   { label: "Dashboard", path: "/" },
+
+  { label: "Accounting", path: "/accounting" },
+  { label: "Chart of Accounts", path: "/chart-of-accounts" },
+  { label: "General Ledger", path: "/general-ledger" },
+  { label: "Journal Entries", path: "/journal-entries" },
+  { label: "Account Registers", path: "/registers" },
+  { label: "Reconciliation", path: "/reconciliation" },
+  
   { label: "Customers", path: "/customers" },
   { label: "Vendors", path: "/vendors" },
   { label: "Banking", path: "/banking" },
   { label: "Inventory", path: "/inventory" },
   { label: "Purchasing", path: "/purchasing" },
   { label: "Sales", path: "/sales" },
+  
+  { label: "Properties", path: "/properties" },
+  { label: "Tenants", path: "/tenants" },
+  { label: "Leases", path: "/leases" },
+
   { label: "Assets", path: "/assets" },
+  
   { label: "Reports", path: "/reports" },
+
+  { label: "Taxes", path: "/taxes" }
 ];
 
 function Sidebar() {

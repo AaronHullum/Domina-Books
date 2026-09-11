@@ -9,6 +9,12 @@ import Banking from "../pages/Banking";
 import Purchasing from "../pages/Purchasing";
 import Sales from "../pages/Sales";
 import Assets from "../pages/Assets";
+import Accounting from "../pages/Accounting";
+import ChartOfAccounts from "../pages/ChartOfAccounts";
+import GeneralLedger from "../pages/GeneralLedger";
+import JournalEntries from "../pages/JournalEntries";
+import AccountRegister from "../pages/AccountRegister";
+
 
 function Placeholder({ title }) {
   return (
@@ -24,6 +30,32 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Dashboard />} />
+
+<Route
+  path="accounting"
+  element={<Accounting />}
+/>
+
+<Route
+  path="chart-of-accounts"
+  element={<ChartOfAccounts />}
+/>
+
+       <Route
+         path="general-ledger"
+         element={<GeneralLedger />}
+        />
+
+        <Route
+         path="journal-entries"
+         element={<JournalEntries />}
+        />
+
+<Route
+  path="registers"
+  element={<AccountRegister />}
+/>
+
 
         <Route
           path="customers"
