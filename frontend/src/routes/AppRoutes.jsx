@@ -14,6 +14,15 @@ import ChartOfAccounts from "../pages/ChartOfAccounts";
 import GeneralLedger from "../pages/GeneralLedger";
 import JournalEntries from "../pages/JournalEntries";
 import AccountRegister from "../pages/AccountRegister";
+import Taxes from "../pages/Taxes";
+import Properties from "../pages/Properties";
+import Tenants from "../pages/Tenants";
+import Leases from "../pages/Leases";
+import Reconciliation from "../pages/Reconciliation";
+import BalanceSheet from "../pages/BalanceSheet";
+import ProfitAndLoss from "../pages/ProfitAndLoss";
+import CashFlow from "../pages/CashFlow";
+import TaxReports from "../pages/TaxReports";
 
 
 function Placeholder({ title }) {
@@ -97,6 +106,15 @@ function AppRoutes() {
           element={<Reports />}
         />
 
+<Route path="taxes" element={<Taxes />} />
+<Route path="properties" element={<Properties />} />
+<Route path="tenants" element={<Tenants />} />
+<Route path="leases" element={<Leases />} />
+<Route path="reconciliation" element={<Reconciliation />} />
+<Route path="balance-sheet" element={<BalanceSheet />} />
+<Route path="profit-and-loss" element={<ProfitAndLoss />} />
+<Route path="cash-flow" element={<CashFlow />} />
+<Route path="tax-reports" element={<TaxReports />} />
         <Route
           path="*"
           element={<Navigate to="/" replace />}

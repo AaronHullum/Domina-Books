@@ -25,7 +25,18 @@ const navigation = [
   
   { label: "Reports", path: "/reports" },
 
-  { label: "Taxes", path: "/taxes" }
+  { label: "Taxes", path: "/taxes" },
+
+{ label: "Properties", path: "/properties" },
+{ label: "Tenants", path: "/tenants" },
+{ label: "Leases", path: "/leases" },
+{ label: "Reconciliation", path: "/reconciliation" },
+{ label: "Taxes", path: "/taxes" },
+{ label: "Balance Sheet", path: "/balance-sheet" },
+{ label: "Profit & Loss", path: "/profit-and-loss" },
+{ label: "Cash Flow", path: "/cash-flow" },
+{ label: "Tax Reports", path: "/tax-reports" },
+
 ];
 
 function Sidebar() {
