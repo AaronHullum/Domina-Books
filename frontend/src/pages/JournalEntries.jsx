@@ -1,53 +1,110 @@
-
-
 import { useState } from "react";
 import { useAccounting } from "../context/AccountingContext";
 
 export default function JournalEntries() {
+  const { accounts, createJournalEntry, journalEntries, generalLedger, loading, error } = useAccounting();
 
-const { addTransaction } = useAccounting();
+  // form state: dynamic lines
+  const [entryDate, setEntryDate] = useState(new Date().toISOString().slice(0, 10));
+  const [reference, setReference] = useState("");
+  const [description, setDescription] = useState("");
+  const [lines, setLines] = useState([
+    { id: 1, accountId: null, debit: "", credit: "" },
+    { id: 2, accountId: null, debit: "", credit: "" }
+  ]);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState(null);
 
-  function handlePostEntry() {
-    addTransaction({
-      date: "09/12/2026",
-      reference: "JE-1002",
-      account: "1010 Checking Account",
-      description: "Manual Journal Entry",
-      debit: 500,
-      credit: 0
-    });
-
-    addTransaction({
-      date: "09/12/2026",
-      reference: "JE-1002",
-      account: "4100 Rental Income",
-      description: "Manual Journal Entry",
-      debit: 0,
-      credit: 500
-    });
-
-    alert("Journal Entry Posted");
+  function updateLine(id, patch) {
+    setLines((current) => current.map((l) => (l.id === id ? { ...l, ...patch } : l)));
   }
 
- 
+  function addLine() {
+    setLines((current) => [...current, { id: Date.now(), accountId: null, debit: "", credit: "" }]);
+  }
 
+  function removeLine(id) {
+    setLines((current) => current.filter((l) => l.id !== id));
+  }
 
-  const [entries] = useState([
-    {
-      date: "09/11/2026",
-      reference: "JE-1001",
-      memo: "Rent Payment",
-      debit: "$1,500",
-      credit: "$1,500"
-    },
-    {
-      date: "09/10/2026",
-      reference: "JE-1002",
-      memo: "Mortgage Payment",
-      debit: "$850",
-      credit: "$850"
+  function validateLines() {
+    if (!Array.isArray(lines) || lines.length < 2) {
+      return "Journal entry requires at least two lines.";
     }
-  ]);
+
+    let debits = 0;
+    let credits = 0;
+
+    for (const l of lines) {
+      const debit = Number(l.debit) || 0;
+      const credit = Number(l.credit) || 0;
+
+      if ((debit > 0 && credit > 0) || (debit === 0 && credit === 0)) {
+        return "Each line must have either a debit or a credit amount (not both).";
+      }
+
+      if (!l.accountId) {
+        return "Each line must have a selected account.";
+      }
+
+      debits += debit;
+      credits += credit;
+    }
+
+    if (Math.round(debits * 100) !== Math.round(credits * 100)) {
+      return `Entry not balanced: debits ${debits} vs credits ${credits}`;
+    }
+
+    return null;
+  }
+
+  async function handlePostEntry() {
+    setFormError(null);
+    const v = validateLines();
+    if (v) {
+      setFormError(v);
+      return;
+    }
+
+    // build payload: convert dollars -> cents in AccountingContext
+    setSubmitting(true);
+    try {
+      await createJournalEntry({
+        entryDate,
+        reference,
+        description,
+        lines: lines.map((l) => ({ accountId: l.accountId, debit: Number(l.debit) || 0, credit: Number(l.credit) || 0 }))
+      });
+
+      // clear form
+      setReference("");
+      setDescription("");
+      setLines([
+        { id: 1, accountId: null, debit: "", credit: "" },
+        { id: 2, accountId: null, debit: "", credit: "" }
+      ]);
+    } catch (err) {
+      console.error(err);
+      setFormError(err?.message || "Failed to post journal entry");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // derive recent entries display using journalEntries and generalLedger
+  const recentEntries = (journalEntries || []).map((je) => {
+    const linesForEntry = (generalLedger || []).filter((l) => l.journalId === je.id);
+    const debitTotal = linesForEntry.reduce((s, l) => s + l.debit, 0);
+    const creditTotal = linesForEntry.reduce((s, l) => s + l.credit, 0);
+    return {
+      id: je.id,
+      date: je.entryDate,
+      reference: je.reference,
+      memo: je.description,
+      debit: `$${debitTotal.toFixed(2)}`,
+      credit: `$${creditTotal.toFixed(2)}`
+    };
+  });
 
   return (
     <>
@@ -63,142 +120,89 @@ const { addTransaction } = useAccounting();
       >
         <h2>New Journal Entry</h2>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            marginBottom: "20px"
-          }}
-        >
-          <input placeholder="Date" />
-          <input placeholder="Reference" />
-          <input placeholder="Memo" />
+        {loading && <div>Loading accounts...</div>}
+        {error && <div style={{ color: "red" }}>{error.message || String(error)}</div>}
+
+        <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+          <input placeholder="Date" value={entryDate} onChange={(e) => setEntryDate(e.target.value)} />
+          <input placeholder="Reference" value={reference} onChange={(e) => setReference(e.target.value)} />
+          <input placeholder="Memo" value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
 
         <h3>Journal Lines</h3>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "80px 2fr 1fr 1fr",
-            gap: "10px",
-            fontWeight: "bold",
-            marginBottom: "10px"
-          }}
-        >
+        <div style={{ display: "grid", gridTemplateColumns: "80px 2fr 1fr 1fr 80px", gap: "10px", fontWeight: "bold", marginBottom: "10px" }}>
           <div>Line</div>
           <div>Account</div>
           <div>Debit</div>
           <div>Credit</div>
+          <div></div>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "80px 2fr 1fr 1fr",
-            gap: "10px",
-            marginBottom: "20px"
-          }}
-        >
-          <input value="1" readOnly />
-          <input placeholder="Account" />
-          <input placeholder="Debit" />
-          <input placeholder="Credit" />
+        {(lines || []).map((line, idx) => (
+          <div key={line.id} style={{ display: "grid", gridTemplateColumns: "80px 2fr 1fr 1fr 80px", gap: "10px", marginBottom: "10px" }}>
+            <input value={idx + 1} readOnly />
 
-          <input value="2" readOnly />
-          <input placeholder="Account" />
-          <input placeholder="Debit" />
-          <input placeholder="Credit" />
+            <select value={line.accountId || ""} onChange={(e) => updateLine(line.id, { accountId: e.target.value ? Number(e.target.value) : null })}>
+              <option value="">Select account</option>
+              {(accounts || []).map((a) => (
+                <option key={a.id} value={a.id}>{`${a.code} ${a.name}`}</option>
+              ))}
+            </select>
+
+            <input placeholder="Debit" value={line.debit} onChange={(e) => updateLine(line.id, { debit: e.target.value, credit: "" })} />
+            <input placeholder="Credit" value={line.credit} onChange={(e) => updateLine(line.id, { credit: e.target.value, debit: "" })} />
+
+            <div>
+              {lines.length > 2 && (
+                <button onClick={() => removeLine(line.id)}>Remove</button>
+              )}
+            </div>
+          </div>
+        ))}
+
+        <div style={{ marginTop: "8px", marginBottom: "8px" }}>
+          <button onClick={addLine}>Add Line</button>
         </div>
 
-        <button>Create Entry</button>
+        {formError && <div style={{ color: "red", marginBottom: "8px" }}>{formError}</div>}
 
-<button
-  onClick={handlePostEntry}
-  style={{
-    marginLeft: "10px",
-    background: "#16a34a",
-    color: "white",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: "8px",
-    cursor: "pointer"
-  }}
->
-  Post Entry
-</button>
-       
+        <button onClick={handlePostEntry} disabled={submitting || loading} style={{ marginRight: 10 }}>
+          {submitting ? "Posting..." : "Post Entry"}
+        </button>
 
-        <div style={{ marginTop: "20px" }}>
-          <strong>Total Debits:</strong> $1,500
-        </div>
-
-        <div>
-          <strong>Total Credits:</strong> $1,500
-        </div>
-
-        <div
-          style={{
-            background: "#dcfce7",
-            color: "#166534",
-            padding: "12px",
-            borderRadius: "8px",
-            marginTop: "10px",
-            fontWeight: "bold",
-            display: "inline-block"
-          }}
-        >
-          ✓ Entry Balanced
-        </div>
-
-        <h3 style={{ marginTop: "20px" }}>
-          Posting Preview
-        </h3>
-
-        <div
-          style={{
-            background: "#f8fafc",
-            padding: "15px",
-            borderRadius: "8px"
-          }}
-        >
-          <p>DR 1010 Checking Account ............ $1,500</p>
-          <p>CR 4100 Rental Income ............... $1,500</p>
-        </div>
       </div>
 
-      <div
-        style={{
-          background: "#ffffff",
-          padding: "20px",
-          borderRadius: "12px"
-        }}
-      >
+      <div style={{ background: "#ffffff", padding: "20px", borderRadius: "12px" }}>
         <h2>Recent Entries</h2>
 
-        <table style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Reference</th>
-              <th>Memo</th>
-              <th>Debits</th>
-              <th>Credits</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {entries.map((entry) => (
-              <tr key={entry.reference}>
-                <td>{entry.date}</td>
-                <td>{entry.reference}</td>
-                <td>{entry.memo}</td>
-                <td>{entry.debit}</td>
-                <td>{entry.credit}</td>
+        {(journalEntries || []).length === 0 ? (
+          <div>No journal entries found.</div>
+        ) : (
+          <table style={{ width: "100%" }}>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Reference</th>
+                <th>Memo</th>
+                <th>Debits</th>
+                <th>Credits</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {recentEntries.map((entry) => (
+                <tr key={entry.id}>
+                  <td>{entry.date}</td>
+                  <td>{entry.reference}</td>
+                  <td>{entry.memo}</td>
+                  <td>{entry.debit}</td>
+                  <td>{entry.credit}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </>
   );

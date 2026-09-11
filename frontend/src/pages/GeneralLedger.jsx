@@ -1,12 +1,7 @@
 import { useAccounting } from "../context/AccountingContext";
 
-
 export default function GeneralLedger() {
-const { transactions } = useAccounting();
-
-
-
-  
+  const { generalLedger, loading, error } = useAccounting();
 
   return (
     <>
@@ -19,33 +14,40 @@ const { transactions } = useAccounting();
           borderRadius: "12px"
         }}
       >
-        <table style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Reference</th>
-              <th>Account</th>
-              <th>Description</th>
-              <th>Debit</th>
-              <th>Credit</th>
-              <th>Balance</th>
-            </tr>
-          </thead>
+        {loading && <div>Loading ledger...</div>}
+        {error && <div style={{ color: "red" }}>{error.message || String(error)}</div>}
 
-          <tbody>
-            {transactions.map((transaction, index) => (
-              <tr key={index}>
-                <td>{transaction.date}</td>
-                <td>{transaction.reference}</td>
-                <td>{transaction.account}</td>
-                <td>{transaction.description}</td>
-                <td>{transaction.debit}</td>
-                <td>{transaction.credit}</td>
-                <td>{transaction.balance}</td>
+        {(generalLedger || []).length === 0 && !loading ? (
+          <div>No ledger transactions found.</div>
+        ) : (
+          <table style={{ width: "100%" }}>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Reference</th>
+                <th>Account</th>
+                <th>Description</th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th>Balance</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {(generalLedger || []).map((transaction, index) => (
+                <tr key={index}>
+                  <td>{transaction.entryDate}</td>
+                  <td>{transaction.journalId}</td>
+                  <td>{`${transaction.accountCode} ${transaction.accountName}`}</td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.debit ? `$${transaction.debit.toFixed(2)}` : ""}</td>
+                  <td>{transaction.credit ? `$${transaction.credit.toFixed(2)}` : ""}</td>
+                  <td>{""}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </>
   );

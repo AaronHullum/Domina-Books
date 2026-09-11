@@ -1,48 +1,119 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import accountingService from "../api/accountingService";
+import { DEFAULT_COMPANY_ID } from "../api/apiClient";
 
 const AccountingContext = createContext();
 
 export function AccountingProvider({ children }) {
-  const [transactions, setTransactions] = useState([
-    {
-      date: "09/11/2026",
-      reference: "JE-1001",
-      account: "1010 Checking Account",
-      description: "Rent Payment",
-      debit: 1500,
-      credit: 0
-    },
-    {
-      date: "09/11/2026",
-      reference: "JE-1001",
-      account: "4100 Rental Income",
-      description: "Rent Payment",
-      debit: 0,
-      credit: 1500
+  const [accounts, setAccounts] = useState([]);
+  const [journalEntries, setJournalEntries] = useState([]);
+  const [generalLedger, setGeneralLedger] = useState([]);
+  const [trialBalance, setTrialBalance] = useState([]);
+  const [financialStatements, setFinancialStatements] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function loadAll() {
+    setLoading(true);
+    try {
+      const [accs, entries, ledger, tb, fin] = await Promise.all([
+        accountingService.getAccounts(DEFAULT_COMPANY_ID),
+        accountingService.getJournalEntries(DEFAULT_COMPANY_ID),
+        accountingService.getGeneralLedger(DEFAULT_COMPANY_ID),
+        accountingService.getTrialBalance(DEFAULT_COMPANY_ID),
+        accountingService.getFinancialStatements(DEFAULT_COMPANY_ID)
+      ]);
+
+      setAccounts(accs || []);
+      setJournalEntries(entries || []);
+      setGeneralLedger(ledger || []);
+      setTrialBalance(tb || []);
+      setFinancialStatements(fin || null);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError(err);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  }
 
-  const addTransaction = (transaction) => {
-    setTransactions((current) => [...current, transaction]);
-  };
+  useEffect(() => {
+    loadAll();
+  }, []);
 
-  const getAccountBalance = (accountName) => {
-    const accountTransactions = transactions.filter(
-      (t) => t.account === accountName
-    );
+  async function refreshJournalEntries() {
+    const entries = await accountingService.getJournalEntries(DEFAULT_COMPANY_ID);
+    setJournalEntries(entries || []);
+  }
 
-    return accountTransactions.reduce(
-      (total, t) => total + (t.debit || 0) - (t.credit || 0),
-      0
-    );
-  };
+  async function refreshGeneralLedger() {
+    const ledger = await accountingService.getGeneralLedger(DEFAULT_COMPANY_ID);
+    setGeneralLedger(ledger || []);
+  }
+
+  async function refreshTrialBalance() {
+    const tb = await accountingService.getTrialBalance(DEFAULT_COMPANY_ID);
+    setTrialBalance(tb || []);
+  }
+
+  async function refreshFinancialStatements() {
+    const fin = await accountingService.getFinancialStatements(DEFAULT_COMPANY_ID);
+    setFinancialStatements(fin || null);
+  }
+
+  // payload: { entryDate, reference, description, lines: [{ accountId, debit (dollars), credit (dollars) }] }
+  async function createJournalEntry({ entryDate, reference, description, lines }) {
+    // convert dollars -> cents for backend
+    const payload = {
+      entryDate,
+      reference,
+      description,
+      lines: lines.map((l) => ({
+        accountId: l.accountId,
+        debitCents: Math.round((Number(l.debit) || 0) * 100),
+        creditCents: Math.round((Number(l.credit) || 0) * 100)
+      }))
+    };
+
+    const res = await accountingService.postJournalEntry(DEFAULT_COMPANY_ID, payload);
+
+    // Refresh data
+    await Promise.all([refreshJournalEntries(), refreshGeneralLedger(), refreshTrialBalance(), refreshFinancialStatements()]);
+
+    return res;
+  }
+
+  function getAccountBalanceByCode(accountCode) {
+    // authoritative: use trialBalance
+    const row = (trialBalance || []).find((r) => r.code === accountCode || `${r.code} ${r.name}` === accountCode);
+    if (row) {
+      // balance as debits - credits
+      return Number(( (row.debits || 0) - (row.credits || 0) ).toFixed(2));
+    }
+
+    // fallback to generalLedger
+    const rows = generalLedger.filter((r) => r.accountCode === accountCode);
+    const balance = rows.reduce((s, r) => s + (r.debit - r.credit), 0);
+    return Number(balance.toFixed(2));
+  }
 
   return (
     <AccountingContext.Provider
       value={{
-        transactions,
-        addTransaction,
-        getAccountBalance
+        accounts,
+        journalEntries,
+        generalLedger,
+        trialBalance,
+        financialStatements,
+        loading,
+        error,
+        createJournalEntry,
+        refreshJournalEntries,
+        refreshGeneralLedger,
+        refreshTrialBalance,
+        refreshFinancialStatements,
+        getAccountBalanceByCode
       }}
     >
       {children}
