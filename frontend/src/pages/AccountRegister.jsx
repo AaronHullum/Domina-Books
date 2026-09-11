@@ -1,21 +1,25 @@
-import { ledgerTransactions } from "../data/ledgerData";
+import {
+  ledgerTransactions,
+  getAccountBalance,
+} from "../data/ledgerService";
 
 export default function AccountRegister() {
+  const accountName = "1010 Checking Account";
 
   const transactions = ledgerTransactions.filter(
-    (transaction) =>
-      transaction.account === "1010 Checking Account"
+    (t) => t.account === accountName
   );
- 
+
+  const balance = getAccountBalance(accountName);
 
   return (
     <>
       <h1>Account Register</h1>
 
-      <h2>1010 Checking Account</h2>
+      <h2>{accountName}</h2>
 
       <p>
-        Beginning Balance: $125,000
+        Current Balance: ${balance}
       </p>
 
       <div
@@ -33,7 +37,6 @@ export default function AccountRegister() {
               <th>Description</th>
               <th>Debit</th>
               <th>Credit</th>
-              <th>Balance</th>
             </tr>
           </thead>
 
@@ -45,7 +48,6 @@ export default function AccountRegister() {
                 <td>{t.description}</td>
                 <td>{t.debit}</td>
                 <td>{t.credit}</td>
-                <td>{t.balance}</td>
               </tr>
             ))}
           </tbody>

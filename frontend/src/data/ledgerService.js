@@ -20,3 +20,19 @@ export const ledgerTransactions = [
 export function addTransaction(transaction) {
   ledgerTransactions.push(transaction);
 }
+
+export function getAccountBalance(accountName) {
+  const transactions = ledgerTransactions.filter(
+    (t) => t.account === accountName
+  );
+
+  let totalDebits = 0;
+  let totalCredits = 0;
+
+  transactions.forEach((t) => {
+    totalDebits += Number(t.debit || 0);
+    totalCredits += Number(t.credit || 0);
+  });
+
+  return totalDebits - totalCredits;
+}

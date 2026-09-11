@@ -1,6 +1,35 @@
+
+
 import { useState } from "react";
+import { addTransaction } from "../data/ledgerService";
 
 export default function JournalEntries() {
+
+  function handlePostEntry() {
+    addTransaction({
+      date: "09/12/2026",
+      reference: "JE-1002",
+      account: "1010 Checking Account",
+      description: "Manual Journal Entry",
+      debit: 500,
+      credit: 0
+    });
+
+    addTransaction({
+      date: "09/12/2026",
+      reference: "JE-1002",
+      account: "4100 Rental Income",
+      description: "Manual Journal Entry",
+      debit: 0,
+      credit: 500
+    });
+
+    alert("Journal Entry Posted");
+  }
+
+ 
+
+
   const [entries] = useState([
     {
       date: "09/11/2026",
@@ -82,19 +111,21 @@ export default function JournalEntries() {
 
         <button>Create Entry</button>
 
-        <button
-          style={{
-            marginLeft: "10px",
-            background: "#16a34a",
-            color: "white",
-            border: "none",
-            padding: "10px 20px",
-            borderRadius: "8px",
-            cursor: "pointer"
-          }}
-        >
-          Post Entry
-        </button>
+<button
+  onClick={handlePostEntry}
+  style={{
+    marginLeft: "10px",
+    background: "#16a34a",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "8px",
+    cursor: "pointer"
+  }}
+>
+  Post Entry
+</button>
+       
 
         <div style={{ marginTop: "20px" }}>
           <strong>Total Debits:</strong> $1,500
