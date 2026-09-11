@@ -1,8 +1,9 @@
-import { ledgerTransactions } from "../data/ledgerData";
+import { useAccounting } from "../context/AccountingContext";
 
 
 export default function GeneralLedger() {
-  const transactions = ledgerTransactions;
+const { transactions } = useAccounting();
+
 
 
   

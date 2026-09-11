@@ -1,16 +1,18 @@
-import {
-  ledgerTransactions,
-  getAccountBalance,
-} from "../data/ledgerService";
+import { useAccounting } from "../context/AccountingContext";
 
 export default function AccountRegister() {
+  const { transactions } = useAccounting();
+
   const accountName = "1010 Checking Account";
 
-  const transactions = ledgerTransactions.filter(
+  const accountTransactions = transactions.filter(
     (t) => t.account === accountName
   );
 
-  const balance = getAccountBalance(accountName);
+  const balance = accountTransactions.reduce(
+    (total, t) => total + (t.debit || 0) - (t.credit || 0),
+    0
+  );
 
   return (
     <>
@@ -26,7 +28,7 @@ export default function AccountRegister() {
         style={{
           background: "#ffffff",
           padding: "20px",
-          borderRadius: "12px"
+          borderRadius: "12px",
         }}
       >
         <table style={{ width: "100%" }}>
@@ -41,7 +43,7 @@ export default function AccountRegister() {
           </thead>
 
           <tbody>
-            {transactions.map((t, i) => (
+            {accountTransactions.map((t, i) => (
               <tr key={i}>
                 <td>{t.date}</td>
                 <td>{t.reference}</td>

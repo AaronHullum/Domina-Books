@@ -1,9 +1,11 @@
 
 
 import { useState } from "react";
-import { addTransaction } from "../data/ledgerService";
+import { useAccounting } from "../context/AccountingContext";
 
 export default function JournalEntries() {
+
+const { addTransaction } = useAccounting();
 
   function handlePostEntry() {
     addTransaction({
